@@ -1,0 +1,2 @@
+# test_python_ocr_lib
+PythonのOCRライブラリの利用方法調査/精度確認
