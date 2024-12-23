@@ -34,16 +34,16 @@ def process_image(img_path, output_path):
         t_path = output_dir_path / f"tesseract_{file_name}.csv"
         t_helper = t_ocr.pyTesseractHelper()
         t_df = t_helper.ocr(move_img_path.as_posix())
-        t_df.to_csv(t_path, index=False)
+        t_df.to_csv(t_path, index=False, encoding="cp932", errors="replace")
 
         # Easy OCR
         e_path = output_dir_path / f"easy_ocr_{file_name}.csv"
         e_helper = e_ocr.EasyOcrHelper()
         e_df = e_helper.ocr(move_img_path.as_posix())
-        e_df.to_csv(e_path, index=False)
+        e_df.to_csv(e_path, index=False, encoding="cp932", errors="replace")
 
         # Paddle OCR
         p_path = output_dir_path / f"paddle_ocr_{file_name}.csv"
         p_helper = p_ocr.PaddleOcrHelper()
         p_df = p_helper.ocr(move_img_path.as_posix())
-        p_df.to_csv(p_path, index=False)
+        p_df.to_csv(p_path, index=False, encoding="cp932", errors="replace")
