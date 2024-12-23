@@ -56,12 +56,30 @@ class pyTesseractHelper:
 
     def _find_tesseract_binary(self) -> str:
         if os.name == 'nt':
-            # windows
-            user_name = os.getlogin()  # ユーザー名を取得
-            return f"C:/Users/{user_name}/AppData/Local/Programs/Tesseract-OCR/tesseract.exe" # デフォルトインストール先
+            # Windows環境
+            # 1. PATH環境変数から検索
+            tesseract_path = shutil.which("tesseract")
+            if tesseract_path:
+                return tesseract_path
+
+            # 2. よくあるカスタムパスをチェック
+            common_paths = [
+                "C:/Program Files/Tesseract-OCR/tesseract.exe",
+                "C:/Program Files (x86)/Tesseract-OCR/tesseract.exe",
+                f"C:/Users/{os.getlogin()}/AppData/Local/Programs/Tesseract-OCR/tesseract.exe"
+            ]
+            for path in common_paths:
+                if os.path.exists(path):
+                    return path
+
+            # 3. 見つからない場合はエラー
+            raise FileNotFoundError("Tesseract executable not found. Please add it to your PATH or specify its location.")
         else:
-            # not windows
-            return shutil.which("tesseract")
+            # Windows以外
+            tesseract_path = shutil.which("tesseract")
+            if tesseract_path:
+                return tesseract_path
+            raise FileNotFoundError("Tesseract executable not found. Please install it and ensure it's in your PATH.")
 
     def _set_tesseract_path(self, tesseract_path: str):
         if tesseract_path is None:
