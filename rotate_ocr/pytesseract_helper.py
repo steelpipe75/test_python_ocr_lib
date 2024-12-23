@@ -4,6 +4,7 @@ import pytesseract
 import pandas as pd
 from io import StringIO
 import os
+import re
 
 # sudo apt-get -y install tesseract-ocr tesseract-ocr-jpn
 pytesseract.pytesseract.tesseract_cmd = None
@@ -22,7 +23,10 @@ class pyTesseractHelper:
                             lang=self.__lang,
                         )
 
-        df = pd.read_csv(StringIO(result), sep='\t')
+        # ダブルクォーテーションを適切にエスケープする処理
+        escaped_result = re.sub(r'(?<!\\)"', r'\"', result)
+
+        df = pd.read_csv(StringIO(escaped_result), sep='\t')
 
         filtered_df = df[df["conf"] >= 0]
 
