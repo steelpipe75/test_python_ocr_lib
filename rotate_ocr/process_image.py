@@ -3,17 +3,31 @@ import shutil
 from pathlib import Path
 
 import rotate_ocr.rotate_img as rotate_img
+import rotate_ocr.image_size as image_size
 
 import rotate_ocr.pytesseract_helper as t_ocr
 import rotate_ocr.easy_ocr_helper as e_ocr
 import rotate_ocr.paddle_ocr_helper as p_ocr
 
-def process_image(img_path, output_path, mode="tpe"):
-    os.makedirs(output_path, exist_ok=True)
+
+def write_size_file(output_size_file_path, filename, size):
+    if not os.path.exists(output_size_file_path):
+        with open(output_size_file_path, "w") as f:
+            f.write("filename,width,height\n")
+    
+    with open(output_size_file_path, "a") as f:
+        f.write(f"{filename},{size[0]},{size[1]}\n")
+
+
+def process_image(img_path, output_dir_path, mode, output_size_file_path):
+    os.makedirs(output_dir_path, exist_ok=True)
 
     img_file_name = Path(img_path).stem
 
-    rotate_img_path_list = rotate_img.rotate_img_for_ocr(img_path, output_path)
+    size = image_size.get_image_size(img_path)
+    write_size_file(output_size_file_path, img_file_name, size)
+
+    rotate_img_path_list = rotate_img.rotate_img_for_ocr(img_path, output_dir_path)
 
     # OCR
     for rotate_img_path in rotate_img_path_list:
@@ -21,7 +35,7 @@ def process_image(img_path, output_path, mode="tpe"):
 
         file_name = Path(rotate_img_path).stem
         file_ext = Path(rotate_img_path).suffix.replace(".", "")
-        output_dir_path = Path(output_path) / img_file_name / f"{file_name}_{file_ext}"
+        output_dir_path = Path(output_dir_path) / img_file_name / f"{file_name}_{file_ext}"
 
         os.makedirs(output_dir_path, exist_ok=True)
 

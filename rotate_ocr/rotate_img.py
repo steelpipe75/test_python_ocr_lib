@@ -55,7 +55,9 @@ def rotate_img_for_ocr(input_file_path: str, output_dir: str):
     output_path_list = []
 
     # 45度ずつ回転させる角度のリスト
-    angle_list = [0, 45, 90, 135, 180, 225, 270, 315]
+    # TODO: 0度のみでテスト
+    ## angle_list = [0, 45, 90, 135, 180, 225, 270, 315]
+    angle_list = [0,]
     for angle in angle_list:
         # 出力ファイル名、Path
         output_file_name = f"{file_name}_{angle}{file_ext}"
