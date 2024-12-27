@@ -1,5 +1,6 @@
 import os
 import shutil
+import json
 from pathlib import Path
 
 import rotate_ocr.image_helper.rotate_img as rotate_img
@@ -21,11 +22,28 @@ def write_size_file(output_size_file_path, filename, size):
         f.write(f"{filename},{size[0]},{size[1]}\n")
 
 
-def ocr_processing(move_img_path, helper_class, output_path, size):
+def ocr_processing(move_img_path, helper_class, output_base_path: Path, size):
     helper = helper_class()
+
     ocr_result = helper.ocr(move_img_path.as_posix())
+
     converted_result = cort.convert_ocr_result_table(ocr_result, size)
-    converted_result.to_csv(output_path, index=False, encoding="cp932", errors="replace")
+    converted_result.to_csv(output_base_path, index=False, encoding="cp932", errors="replace")
+
+    json_str = converted_result.to_json(orient="records", force_ascii=False)
+    print(json_str)
+
+    json_obj = json.loads(json_str)
+    ocr_obj = {
+            "image_size": {
+                    "witdh": size[0],
+                    "height": size[1],
+                },
+            "ocr_result": json_obj,
+        }
+
+    with open(output_base_path.with_suffix(".json"), "w") as f:
+        json.dump(ocr_obj, f, ensure_ascii=False, indent=4)
 
 
 def process_image(img_path, output_dir_path, mode, output_size_file_path):
