@@ -5,6 +5,8 @@ from pathlib import Path
 import rotate_ocr.image_helper.rotate_img as rotate_img
 import rotate_ocr.image_helper.image_size as image_size
 
+import rotate_ocr.utility.convert_ocr_result_table as cort
+
 import rotate_ocr.ocr_helper.pytesseract_helper as t_ocr
 import rotate_ocr.ocr_helper.easy_ocr_helper as e_ocr
 import rotate_ocr.ocr_helper.paddle_ocr_helper as p_ocr
@@ -48,18 +50,21 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
             t_path = output_dir_path / f"tesseract_{file_name}.csv"
             t_helper = t_ocr.pyTesseractHelper()
             t_df = t_helper.ocr(move_img_path.as_posix())
-            t_df.to_csv(t_path, index=False, encoding="cp932", errors="replace")
+            t_conv_df = cort.convert_ocr_result_table(t_df, size)
+            t_conv_df.to_csv(t_path, index=False, encoding="cp932", errors="replace")
 
         if "e" in mode:
             # Easy OCR
             e_path = output_dir_path / f"easy_ocr_{file_name}.csv"
             e_helper = e_ocr.EasyOcrHelper()
             e_df = e_helper.ocr(move_img_path.as_posix())
-            e_df.to_csv(e_path, index=False, encoding="cp932", errors="replace")
+            e_conv_df = cort.convert_ocr_result_table(e_df, size)
+            e_conv_df.to_csv(e_path, index=False, encoding="cp932", errors="replace")
 
         if "p" in mode:
             # Paddle OCR
             p_path = output_dir_path / f"paddle_ocr_{file_name}.csv"
             p_helper = p_ocr.PaddleOcrHelper()
             p_df = p_helper.ocr(move_img_path.as_posix())
-            p_df.to_csv(p_path, index=False, encoding="cp932", errors="replace")
+            p_conv_df = cort.convert_ocr_result_table(p_df, size)
+            p_conv_df.to_csv(p_path, index=False, encoding="cp932", errors="replace")
