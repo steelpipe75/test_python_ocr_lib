@@ -21,6 +21,13 @@ def write_size_file(output_size_file_path, filename, size):
         f.write(f"{filename},{size[0]},{size[1]}\n")
 
 
+def ocr_processing(move_img_path, helper_class, output_path, size):
+    helper = helper_class()
+    ocr_result = helper.ocr(move_img_path.as_posix())
+    converted_result = cort.convert_ocr_result_table(ocr_result, size)
+    converted_result.to_csv(output_path, index=False, encoding="cp932", errors="replace")
+
+
 def process_image(img_path, output_dir_path, mode, output_size_file_path):
     os.makedirs(output_dir_path, exist_ok=True)
 
@@ -46,25 +53,13 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
         shutil.move(rotate_img_path, move_img_path)
 
         if "t" in mode:
-            # Tesseract OCR
             t_path = output_dir_path / f"tesseract_{file_name}.csv"
-            t_helper = t_ocr.pyTesseractHelper()
-            t_df = t_helper.ocr(move_img_path.as_posix())
-            t_conv_df = cort.convert_ocr_result_table(t_df, size)
-            t_conv_df.to_csv(t_path, index=False, encoding="cp932", errors="replace")
+            ocr_processing(move_img_path, t_ocr.pyTesseractHelper, t_path, size)
 
         if "e" in mode:
-            # Easy OCR
             e_path = output_dir_path / f"easy_ocr_{file_name}.csv"
-            e_helper = e_ocr.EasyOcrHelper()
-            e_df = e_helper.ocr(move_img_path.as_posix())
-            e_conv_df = cort.convert_ocr_result_table(e_df, size)
-            e_conv_df.to_csv(e_path, index=False, encoding="cp932", errors="replace")
+            ocr_processing(move_img_path, e_ocr.EasyOcrHelper, e_path, size)
 
         if "p" in mode:
-            # Paddle OCR
             p_path = output_dir_path / f"paddle_ocr_{file_name}.csv"
-            p_helper = p_ocr.PaddleOcrHelper()
-            p_df = p_helper.ocr(move_img_path.as_posix())
-            p_conv_df = cort.convert_ocr_result_table(p_df, size)
-            p_conv_df.to_csv(p_path, index=False, encoding="cp932", errors="replace")
+            ocr_processing(move_img_path, p_ocr.PaddleOcrHelper, p_path, size)
