@@ -1,7 +1,7 @@
 import rotate_ocr.rotate_img as rotate_img
-import rotate_ocr.easy_ocr_helper as eoh
-import rotate_ocr.paddle_ocr_helper as poh
-import rotate_ocr.pytesseract_helper as toh
+import rotate_ocr.ocr_helper.easy_ocr_helper as eoh
+import rotate_ocr.ocr_helper.paddle_ocr_helper as poh
+import rotate_ocr.ocr_helper.pytesseract_helper as toh
 # import yomitoku_helper as yoh
 import pprint
 

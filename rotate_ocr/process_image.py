@@ -5,9 +5,9 @@ from pathlib import Path
 import rotate_ocr.rotate_img as rotate_img
 import rotate_ocr.image_size as image_size
 
-import rotate_ocr.pytesseract_helper as t_ocr
-import rotate_ocr.easy_ocr_helper as e_ocr
-import rotate_ocr.paddle_ocr_helper as p_ocr
+import rotate_ocr.ocr_helper.pytesseract_helper as t_ocr
+import rotate_ocr.ocr_helper.easy_ocr_helper as e_ocr
+import rotate_ocr.ocr_helper.paddle_ocr_helper as p_ocr
 
 
 def write_size_file(output_size_file_path, filename, size):
