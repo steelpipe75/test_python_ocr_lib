@@ -2,8 +2,8 @@ import os
 import shutil
 from pathlib import Path
 
-import rotate_ocr.rotate_img as rotate_img
-import rotate_ocr.image_size as image_size
+import rotate_ocr.image_helper.rotate_img as rotate_img
+import rotate_ocr.image_helper.image_size as image_size
 
 import rotate_ocr.ocr_helper.pytesseract_helper as t_ocr
 import rotate_ocr.ocr_helper.easy_ocr_helper as e_ocr

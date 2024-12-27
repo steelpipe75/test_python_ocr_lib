@@ -1,4 +1,4 @@
-import rotate_ocr.rotate_img as rotate_img
+import rotate_ocr.image_helper.rotate_img as rotate_img
 import rotate_ocr.ocr_helper.easy_ocr_helper as eoh
 import rotate_ocr.ocr_helper.paddle_ocr_helper as poh
 import rotate_ocr.ocr_helper.pytesseract_helper as toh
