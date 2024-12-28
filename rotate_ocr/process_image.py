@@ -54,7 +54,12 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
     size = image_size.get_image_size(img_path)
     write_size_file(output_size_file_path, img_file_name, size)
 
-    rotate_img_path_list = rotate_img.rotate_img_for_ocr(img_path, output_dir_path)
+    rotate = True if "r" in mode else False
+
+    if rotate:
+        rotate_img_path_list = rotate_img.rotate_img_for_ocr(img_path, output_dir_path)
+    else:
+        rotate_img_path_list = [img_path]
 
     # OCR
     for rotate_img_path in rotate_img_path_list:
@@ -66,9 +71,10 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
 
         os.makedirs(output_dir_path, exist_ok=True)
 
-        # 画像ファイルのコピー
+        # 画像ファイルの移動
         move_img_path = output_dir_path / f"{file_name}.{file_ext}"
-        shutil.move(rotate_img_path, move_img_path)
+        if rotate:
+            shutil.move(rotate_img_path, move_img_path)
 
         if "t" in mode:
             t_path = output_dir_path / f"tesseract_{file_name}.csv"

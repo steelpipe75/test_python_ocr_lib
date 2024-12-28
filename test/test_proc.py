@@ -5,7 +5,8 @@ def test_process_image():
     process_image.process_image(
             "./test/img_data/test_data.png",
             "./output",
-            "tep",
+            # "tep",
+            "p",
             "./output/output_size.csv",
         )
 
