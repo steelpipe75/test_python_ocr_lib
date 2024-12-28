@@ -75,6 +75,8 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
         move_img_path = output_dir_path / f"{file_name}.{file_ext}"
         if rotate:
             shutil.move(rotate_img_path, move_img_path)
+        else:
+            shutil.copy(rotate_img_path, move_img_path)
 
         if "t" in mode:
             t_path = output_dir_path / f"tesseract_{file_name}.csv"
