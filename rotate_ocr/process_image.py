@@ -42,7 +42,7 @@ def ocr_processing(move_img_path, helper_class, output_base_path: Path, size):
             "ocr_result": json_obj,
         }
 
-    with open(output_base_path.with_suffix(".json"), "w") as f:
+    with open(output_base_path.with_suffix(".json"), "w", encoding="utf-8") as f:
         json.dump(ocr_obj, f, ensure_ascii=False, indent=4)
 
 
