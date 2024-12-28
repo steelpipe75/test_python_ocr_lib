@@ -31,7 +31,7 @@ def ocr_processing(move_img_path, helper_class, output_base_path: Path, size):
     converted_result.to_csv(output_base_path, index=False, encoding="cp932", errors="replace")
 
     json_str = converted_result.to_json(orient="records", force_ascii=False)
-    print(json_str)
+    # print(json_str)
 
     json_obj = json.loads(json_str)
     ocr_obj = {
