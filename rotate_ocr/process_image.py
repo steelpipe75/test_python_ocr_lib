@@ -5,6 +5,7 @@ from pathlib import Path
 
 import rotate_ocr.image_helper.rotate_img as rotate_img
 import rotate_ocr.image_helper.image_size as image_size
+import rotate_ocr.image_helper.blackout_text_areas as bta
 
 import rotate_ocr.utility.convert_ocr_result_table as cort
 
@@ -26,6 +27,8 @@ def ocr_processing(move_img_path, helper_class, output_base_path: Path, size):
     helper = helper_class()
 
     ocr_result = helper.ocr(move_img_path.as_posix())
+
+    bta.blackout_text_areas(move_img_path, ocr_result, output_base_path.with_suffix(".jpg"))
 
     converted_result = cort.convert_ocr_result_table(ocr_result, size)
     converted_result.to_csv(output_base_path, index=False, encoding="cp932", errors="replace")
