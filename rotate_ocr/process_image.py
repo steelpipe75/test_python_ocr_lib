@@ -25,6 +25,7 @@ def write_size_file(output_size_file_path, filename, size):
 
 def ocr_processing(
         img_path : Path,
+        degree : int,
         img_file_name : str,
         output_dir_path : Path,
         ocr_name_str : str,
@@ -41,11 +42,19 @@ def ocr_processing(
 
     os.makedirs(output_ocr_path, exist_ok=True)
 
-    output_base_path = output_ocr_path / f"{file_name}.csv"
+    output_base_path = output_ocr_path / f"{file_name}_{degree:03}.csv"
+    rotate_img_path = output_ocr_path / f"{file_name}_{degree:03}.{file_ext}"
 
-    ocr_result = helper.ocr(img_path.as_posix())
+    rotate_img.rotate_img(
+            img_path.as_posix(),
+            rotate_img_path.as_posix(),
+            degree
+        )
 
-    bta.blackout_text_areas(img_path, ocr_result, output_base_path.with_suffix(".jpg"))
+    ocr_result = helper.ocr(rotate_img_path.as_posix())
+
+    bta_image_path = output_base_path.with_suffix(".jpg")
+    bta.blackout_text_areas(rotate_img_path, ocr_result, bta_image_path)
 
     converted_result = cort.convert_ocr_result_table(ocr_result, size)
     converted_result.to_csv(output_base_path, index=False, encoding="cp932", errors="replace")
@@ -68,6 +77,7 @@ def ocr_processing(
     with open(output_base_path.with_suffix(".json"), "w", encoding="utf-8") as f:
         json.dump(ocr_obj, f, ensure_ascii=False, indent=4)
 
+    return img_path
 
 def process_image(img_path, output_dir_path, mode, output_size_file_path):
     os.makedirs(output_dir_path, exist_ok=True)
@@ -80,17 +90,21 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
     rotate = True if "r" in mode else False
 
     if rotate:
-        rotate_img_path_list = rotate_img.rotate_img_for_ocr(img_path, output_dir_path)
+        rotate_deg_list = [0, 45, 90, 135, 180, 225, 270, 315]
     else:
-        rotate_img_path_list = [img_path]
+        rotate_deg_list = [0]
 
     output_dir = Path(output_dir_path)
 
+    pobj_img_path = Path(img_path)
+
     # Tesseract
     if "t" in mode:
-        for rotate_img_path in rotate_img_path_list:
-            ocr_processing(
-                    rotate_img_path,
+        work_img_path = pobj_img_path
+        for degree in rotate_deg_list:
+            work_img_path = ocr_processing(
+                    work_img_path,
+                    degree,
                     img_file_name,
                     output_dir,
                     "tesseract",
@@ -100,9 +114,11 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
 
     # EasyOCR
     if "e" in mode:
-        for rotate_img_path in rotate_img_path_list:
-            ocr_processing(
-                    rotate_img_path,
+        work_img_path = pobj_img_path
+        for degree in rotate_deg_list:
+            work_img_path = ocr_processing(
+                    work_img_path,
+                    degree,
                     img_file_name,
                     output_dir,
                     "EasyOCR",
@@ -112,13 +128,14 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
 
     # PaddleOCR
     if "p" in mode:
-        for rotate_img_path in rotate_img_path_list:
-            ocr_processing(
-                    rotate_img_path,
+        work_img_path = pobj_img_path
+        for degree in rotate_deg_list:
+            work_img_path = ocr_processing(
+                    work_img_path,
+                    degree,
                     img_file_name,
                     output_dir,
                     "PaddleOCR",
                     p_ocr.PaddleOcrHelper,
                     size
                 )
-
