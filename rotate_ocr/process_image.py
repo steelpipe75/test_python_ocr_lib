@@ -34,7 +34,7 @@ def ocr_processing(
     ):
     helper = helper_class()
 
-    print(f"Processing {img_path}")
+    print(f"# Processing | {ocr_name_str} : {img_path}")
 
     file_name = img_path.stem
     file_ext = img_path.suffix.replace(".", "")
@@ -53,7 +53,7 @@ def ocr_processing(
 
     ocr_result = helper.ocr(rotate_img_path.as_posix())
 
-    bta_image_path = output_base_path.with_suffix(".jpg")
+    bta_image_path = output_ocr_path / f"{file_name}_{degree:03}_bta.{file_ext}"
     bta.blackout_text_areas(rotate_img_path, ocr_result, bta_image_path)
 
     converted_result = cort.convert_ocr_result_table(ocr_result, size)
