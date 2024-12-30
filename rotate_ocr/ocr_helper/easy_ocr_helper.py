@@ -1,9 +1,13 @@
 import pandas as pd
 import easyocr
 
+
 class EasyOcrHelper:
     def __init__(self, lang_list =["en", "ja"]):
-        self.__easyocr_Reader = easyocr.Reader(lang_list=lang_list)
+        self.__easyocr_Reader = easyocr.Reader(
+                lang_list=lang_list,
+                verbose=False,
+            )
         pass
 
     def ocr(self, img_path: str):
