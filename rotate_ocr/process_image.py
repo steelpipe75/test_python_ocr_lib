@@ -32,6 +32,9 @@ def ocr_processing(move_img_path, helper_class, output_base_path: Path, size):
 
     converted_result = cort.convert_ocr_result_table(ocr_result, size)
     converted_result.to_csv(output_base_path, index=False, encoding="cp932", errors="replace")
+    # ファイル名と拡張子を分割して "_utf8" を追加
+    utf8_path = output_base_path.with_name(output_base_path.stem + "_utf8" + output_base_path.suffix)
+    converted_result.to_csv(utf8_path, index=False, encoding="UTF-8", errors="replace")
 
     json_str = converted_result.to_json(orient="records", force_ascii=False)
     # print(json_str)
