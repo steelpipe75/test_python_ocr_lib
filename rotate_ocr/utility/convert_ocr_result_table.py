@@ -10,7 +10,7 @@ def convert_ocr_result_table(ocr_result_table: pd.DataFrame, image_size):
     height_list = []
     
     for index, row in ocr_result_table.iterrows():
-        print(f"Processing {index}")
+        # print(f"Processing {index}")
         x_lt = row["座標(左上x)"]
         y_lt = row["座標(左上y)"]
         x_rb = row["座標(右下x)"]
