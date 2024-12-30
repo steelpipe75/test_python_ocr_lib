@@ -8,6 +8,7 @@ import rotate_ocr.image_helper.image_size as image_size
 import rotate_ocr.image_helper.blackout_text_areas as bta
 
 import rotate_ocr.utility.convert_ocr_result_table as cort
+import rotate_ocr.utility.rotate_ocr_result_table as rort
 
 import rotate_ocr.ocr_helper.pytesseract_helper as t_ocr
 import rotate_ocr.ocr_helper.easy_ocr_helper as e_ocr
@@ -53,8 +54,11 @@ def ocr_processing(
 
     ocr_result = helper.ocr(rotate_img_path.as_posix())
 
+    rotate_img_size = image_size.get_image_size(rotate_img_path.as_posix())
+    ocr_result = rort.rotate_ocr_result_table(ocr_result, degree, rotate_img_size)
+
     bta_image_path = output_ocr_path / f"{file_name}_{degree:03}_bta.{file_ext}"
-    bta.blackout_text_areas(rotate_img_path, ocr_result, bta_image_path)
+    bta.blackout_text_areas(img_path, ocr_result, bta_image_path)
 
     converted_result = cort.convert_ocr_result_table(ocr_result, size)
     converted_result.to_csv(output_base_path, index=False, encoding="cp932", errors="replace")
