@@ -67,31 +67,46 @@ def process_image(img_path, output_dir_path, mode, output_size_file_path):
     else:
         rotate_img_path_list = [img_path]
 
-    # OCR
-    for rotate_img_path in rotate_img_path_list:
-        print(f"Processing {rotate_img_path}")
+    # Tesseract
+    if "t" in mode:
+        for rotate_img_path in rotate_img_path_list:
+            print(f"Processing {rotate_img_path}")
 
-        file_name = Path(rotate_img_path).stem
-        file_ext = Path(rotate_img_path).suffix.replace(".", "")
-        output_ocr_path = Path(output_dir_path) / img_file_name / f"{file_name}_{file_ext}"
+            file_name = Path(rotate_img_path).stem
+            file_ext = Path(rotate_img_path).suffix.replace(".", "")
+            output_ocr_path = Path(output_dir_path) / "tesseract" / img_file_name / f"{file_name}_{file_ext}"
 
-        os.makedirs(output_ocr_path, exist_ok=True)
+            os.makedirs(output_ocr_path, exist_ok=True)
 
-        # 画像ファイルの移動
-        ocr_img_path = output_ocr_path / f"{file_name}.{file_ext}"
-        if rotate:
-            shutil.move(rotate_img_path, ocr_img_path)
-        else:
-            shutil.copy(rotate_img_path, ocr_img_path)
-
-        if "t" in mode:
             t_path = output_ocr_path / f"tesseract_{file_name}.csv"
-            ocr_processing(ocr_img_path, t_ocr.pyTesseractHelper, t_path, size)
+            ocr_processing(rotate_img_path, t_ocr.pyTesseractHelper, t_path, size)
 
-        if "e" in mode:
+    # EasyOCR
+    if "e" in mode:
+        for rotate_img_path in rotate_img_path_list:
+            print(f"Processing {rotate_img_path}")
+
+            file_name = Path(rotate_img_path).stem
+            file_ext = Path(rotate_img_path).suffix.replace(".", "")
+            output_ocr_path = Path(output_dir_path) / "EasyOCR" / img_file_name / f"{file_name}_{file_ext}"
+
+            os.makedirs(output_ocr_path, exist_ok=True)
+
             e_path = output_ocr_path / f"easy_ocr_{file_name}.csv"
-            ocr_processing(ocr_img_path, e_ocr.EasyOcrHelper, e_path, size)
+            ocr_processing(rotate_img_path, e_ocr.EasyOcrHelper, e_path, size)
 
-        if "p" in mode:
+
+    # PaddleOCR
+    if "p" in mode:
+        for rotate_img_path in rotate_img_path_list:
+            print(f"Processing {rotate_img_path}")
+
+            file_name = Path(rotate_img_path).stem
+            file_ext = Path(rotate_img_path).suffix.replace(".", "")
+            output_ocr_path = Path(output_dir_path) / "PaddleOCR" / img_file_name / f"{file_name}_{file_ext}"
+
+            os.makedirs(output_ocr_path, exist_ok=True)
+
             p_path = output_ocr_path / f"paddle_ocr_{file_name}.csv"
-            ocr_processing(ocr_img_path, p_ocr.PaddleOcrHelper, p_path, size)
+            ocr_processing(rotate_img_path, p_ocr.PaddleOcrHelper, p_path, size)
+
