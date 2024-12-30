@@ -6,8 +6,10 @@ from io import StringIO
 import os
 import re
 
+
 # sudo apt-get -y install tesseract-ocr tesseract-ocr-jpn
 pytesseract.pytesseract.tesseract_cmd = None
+
 
 class pyTesseractHelper:
     def __init__(self, tesseract_path = None, lang: str = "jpn+eng"):

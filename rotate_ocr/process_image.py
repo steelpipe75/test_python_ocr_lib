@@ -24,14 +24,14 @@ def write_size_file(output_size_file_path, filename, size):
 
 
 def ocr_processing(
-        img_path : Path,
-        degree : int,
-        img_file_name : str,
-        output_dir_path : Path,
-        ocr_name_str : str,
-        helper_class,
-        size : tuple[int, int]
-    ):
+            img_path : Path,
+            degree : int,
+            img_file_name : str,
+            output_dir_path : Path,
+            ocr_name_str : str,
+            helper_class,
+            size : tuple[int, int]
+        ):
     helper = helper_class()
 
     print(f"# Processing | {ocr_name_str} : {img_path}")
@@ -79,7 +79,12 @@ def ocr_processing(
 
     return img_path
 
-def process_image(img_path, output_dir_path, mode, output_size_file_path):
+def process_image(
+            img_path,
+            output_dir_path,
+            mode,
+            output_size_file_path
+        ):
     os.makedirs(output_dir_path, exist_ok=True)
 
     img_file_name = Path(img_path).stem

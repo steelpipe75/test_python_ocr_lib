@@ -3,7 +3,10 @@ import pandas as pd
 import rotate_ocr.utility.convert_coords as cc
 
 
-def convert_ocr_result_table(ocr_result_table: pd.DataFrame, image_size):
+def convert_ocr_result_table(
+            ocr_result_table: pd.DataFrame,
+            image_size: tuple[int, int]
+        ):
     x_center_list = []
     y_center_list = []
     width_list = []

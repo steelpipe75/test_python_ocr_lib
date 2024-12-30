@@ -3,6 +3,7 @@ from yomitoku.data.functions import load_image
 import pandas as pd
 import tempfile
 
+
 class YomiTokuHelper:
     def __init__(self):
         self.__analyzer = DocumentAnalyzer(configs={}, visualize=False)

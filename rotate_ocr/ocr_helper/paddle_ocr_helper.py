@@ -1,6 +1,7 @@
 from paddleocr import PaddleOCR
 import pandas as pd
 
+
 class PaddleOcrHelper:
     def __init__(self, lang: str ="japan"):
         self.__paddle_ocr = PaddleOCR(lang=lang)
